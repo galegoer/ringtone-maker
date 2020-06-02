@@ -4,7 +4,8 @@ This is a ringtone maker for Apple devices which requires a YouTube link you wou
 # Requirements
 - Python 3.8
 - pytube (install using pip or from the web)
-- ffmpeg (install using pip or from the web)
+- ffmpeg (install using pip or from the web) 
+ffmpeg needs to work from the cmd line so it should be added to PATH
 - iTunes (to transfer your ringtones to your iPhone)
 
 # Steps
@@ -20,7 +21,7 @@ Example directory: "C:\\Users\\USERNAME\\Music\\Ringtones\\'
 
 
 # Known issue
-Pytube may have an issue as YouTube sometimes changes its key names. You may follow this branch of the revised code 
+- Pytube may have an issue as YouTube sometimes changes its key names. You may follow this branch of the revised code 
 https://github.com/nficano/pytube/pull/643
 or if you would like to fix the issue yourself at line 299 of extract.py (located where you installed pytube)
 
@@ -32,3 +33,5 @@ or if you would like to fix the issue yourself at line 299 of extract.py (locate
 ```
 
 Change the string "cipher" to "signatureCipher". Then save and rerun the program.
+
+- Sometimes pytube may not find the title of the youtube video in which case it simply names the file YouTube
