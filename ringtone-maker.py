@@ -1,7 +1,7 @@
 from pytube import YouTube 
 import os
 import subprocess
-import ffmpeg
+
 
 SAVE_PATH = 'C:\\Users\\USERNAME\\Music\\Ringtones\\' #CHANGE THIS TO DIRECTORY YOU WANT TO WORK WITH (Make sure to keep or add the \\ for nested directories and make sure the directory exists) 
 
@@ -17,32 +17,37 @@ def download_audio(downloadLink, start_time, end_time):
     #Begin downloading the video    
     try:
         yt = YouTube(downloadLink)
-        print(yt.title)
+        for i in range(3):
+            if yt.title == 'YouTube':
+                yt = YouTube(downloadLink)
+            else:
+                break
     except Exception as e:
         print(e)
         return
     d_video = yt.streams.filter(only_audio=True).first()
     try:
         #downloading the video
-        file_path = SAVE_PATH+yt.title+'.mp3'
+        title = yt.title.replace('\\', '').replace('/', '').replace(':', ' - ').replace('*', '-').replace('?', '').replace('<', '').replace('>', '').replace('|', '').replace('.', '')        
+        file_path = SAVE_PATH+title+'.mp4'
         dfile = d_video.download()
         os.rename(dfile, file_path)
-           
-        print("DOWNLOADED: "+ yt.title)
+
+        print("DOWNLOADED: "+ title)
     except Exception as e:
         print(e)
         print("Error Downloading the YouTube video") 
         return
                 
     #ffmpeg convert mp3 to AAC
-    mp3_file = yt.title + '.mp3'
-    m4a_file = yt.title + '.m4a'
-    m4r_file = yt.title + '.m4r'
+    mp4_file = title + '.mp4'
+    m4a_file = title + '.m4a'
+    m4r_file = title + '.m4r'
     os.chdir(SAVE_PATH)
     
-    cmd = ['ffmpeg', '-ss', start_time, '-to', end_time, '-i', mp3_file, '-c:a', 'aac', m4a_file]
+    cmd = ['ffmpeg', '-ss', start_time, '-to', end_time, '-i', mp4_file, '-c:a', 'aac', m4a_file]
     subprocess.call(cmd)
-    os.remove(mp3_file)
+    os.remove(mp4_file)
     
     os.rename(m4a_file, m4r_file)
 
