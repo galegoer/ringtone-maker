@@ -3,9 +3,7 @@ import os
 import subprocess
 
 
-SAVE_PATH = 'C:\\Users\\USERNAME\\Music\\Ringtones\\' #CHANGE THIS TO DIRECTORY YOU WANT TO WORK WITH (Make sure to keep or add the \\ for nested directories and make sure the directory exists) 
-
-def download_audio(downloadLink, start_time, end_time):
+def download_audio(downloadLink, start_time, end_time, save_path):
     try:
         start_time = convert_time(start_time)
         end_time = convert_time(end_time)
@@ -29,9 +27,11 @@ def download_audio(downloadLink, start_time, end_time):
     try:
         #downloading the video
         title = yt.title.replace('\\', '').replace('/', '').replace(':', ' - ').replace('*', '-').replace('?', '').replace('<', '').replace('>', '').replace('|', '').replace('.', '')        
-        file_path = SAVE_PATH+title+'.mp4'
         dfile = d_video.download()
-        os.rename(dfile, file_path)
+        file_path = title+'.mp4'
+        if save_path != '':
+            file_path = save_path+title+'.mp4'
+            os.rename(dfile, file_path)
 
         print("DOWNLOADED: "+ title)
     except Exception as e:
@@ -43,8 +43,9 @@ def download_audio(downloadLink, start_time, end_time):
     mp4_file = title + '.mp4'
     m4a_file = title + '.m4a'
     m4r_file = title + '.m4r'
-    os.chdir(SAVE_PATH)
-    
+    if save_path != '':
+        os.chdir(save_path)
+        
     cmd = ['ffmpeg', '-ss', start_time, '-to', end_time, '-i', mp4_file, '-c:a', 'aac', m4a_file]
     subprocess.call(cmd)
     os.remove(mp4_file)
@@ -63,4 +64,7 @@ if __name__ == "__main__":
     link = input("Enter YouTube link: ")
     start_time = input("Enter start time of your ringtone in format 0:00 : ")
     end_time = input("Enter end time of your ringtone in the format 0:00 : ")
-    download_audio(link, start_time, end_time)
+    save_path = input("Enter the save path where you would like to save your ringtones or push Enter/Return \n" +
+          "to save it to wherever this file is located. \n An example of a save path is 'C:\\Users\\username\\Music\\Ringtones\\'")
+    
+    download_audio(link, start_time, end_time, save_path)
